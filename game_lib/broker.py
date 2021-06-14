@@ -49,7 +49,7 @@ class Broker:
             return buy_success, f'{self.name} has successfully purchased {item_name} for {total_cost:,.2f}!'
         return buy_success, f'{self.name} has insufficient funds!'
 
-    def calculate_cost(item_name: str, amount: int) -> int:
+    def calculate_cost(self, item_name: str, amount: int) -> int:
         return self.inventory[item_name].cost * amount
 
     def refresh(self):

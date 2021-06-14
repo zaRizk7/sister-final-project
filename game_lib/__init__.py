@@ -38,11 +38,14 @@ class GameHandler(XMLRPC):
         return f'[DAY {self.day}]' if self.day == 1 else '[DAY 1]'
 
     def xmlrpc_preview(self, broker_id: int):
-        result = f'Broker {broker_id} Catalogs:\n'
+        result = f'Broker {broker_id}\' inventory:\n'
         for item_name, item_obj in self.broker_list[broker_id-1].inventory.items():
             cost, amount = item_obj.cost, item_obj.amount
             result += f'\t{item_name}\tCost: {cost}\tAvailable Amount: {amount}\n'
         return result
+
+    def xmlrpc_get_broker_list(self):
+        return [b.name for b in self.broker_list]
 
 
 if __name__ == '__main__':
