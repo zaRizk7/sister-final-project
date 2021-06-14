@@ -1,6 +1,6 @@
 from random import randint
 from pprint import pformat
-from item import Item
+from game_lib.item import Item
 
 
 class Broker:

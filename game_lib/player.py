@@ -1,5 +1,5 @@
 from xmlrpc.client import ServerProxy
-from broker import Broker
+from game_lib.broker import Broker
 
 
 class PlayerMenu(ServerProxy):
@@ -28,19 +28,24 @@ class PlayerMenu(ServerProxy):
                 if obj == 'broker':
                     for i, name in enumerate(self.get_broker_list()):
                         print(f'{i+1}. {name}')
-                else:
+                elif obj == 'inventory':
                     print(f'{self.player.name}\'s inventory:')
                     for item_name, item_obj in self.player.inventory.items():
                         cost, amount = item_obj.cost, item_obj.amount
                         print(
                             f'\t{item_name}\tCost: {cost}\tAvailable Amount: {amount}')
                     print(f'Remaining cash: ${self.player.cash:,.2f}')
+                else:
+                    raise self.command_exception()
         elif len(command) == 3:
-            action, broker, broker_id = command
-            if action == 'view':
+            action, obj, broker_id = command
+            if action == 'view' and obj == 'broker':
                 print(self.preview(broker_id))
+            else:
+                raise self.command_exception()
         elif len(command) == 4:
             action, broker_id, item_name, amount = command
+            item_name = item_name.capitalize()
             if action == 'buy':
                 total_cost, message = self.buy(
                     broker_id, item_name, amount, self.player.cash)
@@ -48,7 +53,7 @@ class PlayerMenu(ServerProxy):
                     self.player.inventory[item_name].amount += amount
                 self.player.cash -= total_cost
                 print(message)
-            else:
+            elif action == 'sell':
                 total_cost = self.player.calculate_cost(item_name, amount)
                 success = self.sell(broker_id, item_name, amount, total_cost)
                 if success:
@@ -58,6 +63,8 @@ class PlayerMenu(ServerProxy):
                 else:
                     message = f'Broker {broker_id} does not have enough cash!'
                 print(message)
+            else:
+                raise self.command_exception()
 
     def command_exception(self):
         return Exception('Invalid command, please try again!')
