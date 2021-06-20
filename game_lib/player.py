@@ -8,6 +8,7 @@ class PlayerMenu(ServerProxy):
         self.player = Broker(name)
 
     def prompt_command(self):
+        self.identifier(self.player.name)
         command = self.get_input()
         while command[0] != 'quit':
             try:
