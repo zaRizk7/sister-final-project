@@ -36,6 +36,7 @@ class Broker:
             sell_success = True
             self.inventory[item_name].amount -= amount
             self.cash += total_cost
+            
         return total_cost, sell_success
 
     def buy(self, item_name: str, amount: int, total_cost: int) -> str:

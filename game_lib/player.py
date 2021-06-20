@@ -40,7 +40,7 @@ class PlayerMenu(ServerProxy):
         elif len(command) == 3:
             action, obj, broker_id = command
             if action == 'view' and obj == 'broker':
-                print(self.preview(broker_id))
+                print(self.preview(self.player.name, broker_id))
             else:
                 raise self.command_exception()
         elif len(command) == 4:
@@ -48,21 +48,24 @@ class PlayerMenu(ServerProxy):
             item_name = item_name.capitalize()
             if action == 'buy':
                 total_cost, message = self.buy(
-                    broker_id, item_name, amount, self.player.cash)
+                    self.player.name, broker_id, item_name, amount, self.player.cash)
                 if total_cost > 0:
                     self.player.inventory[item_name].amount += amount
                 self.player.cash -= total_cost
                 print(message)
             elif action == 'sell':
                 total_cost = self.player.calculate_cost(item_name, amount)
-                success = self.sell(broker_id, item_name, amount, total_cost)
-                if success:
-                    self.player.cash += total_cost
-                    self.player.inventory[item_name].amount -= amount
-                    message = f'Sucessfully sell {item_name} to broker {broker_id}. You have ${self.player.cash:,.2f}!'
-                else:
-                    message = f'Broker {broker_id} does not have enough cash!'
-                print(message)
+                if self.player.inventory[item_name].amount - amount>= 0:
+                    success = self.sell(self.player.name, broker_id, item_name, amount, total_cost)
+                    if success:
+                        self.player.cash += total_cost
+                        self.player.inventory[item_name].amount -= amount
+                        message = f'Sucessfully sell {item_name} to broker {broker_id}. You have ${self.player.cash:,.2f}!'
+                    else:
+                        message = f'Broker {broker_id} does not have enough cash!'
+                    print(message)
+                else :
+                    print(f"Insufficient item quantity!")
             else:
                 raise self.command_exception()
 
