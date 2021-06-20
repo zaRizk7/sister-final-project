@@ -1,6 +1,6 @@
 from random import randint
 from pprint import pformat
-from item import Item
+from game_lib.item import Item
 
 
 class Broker:
@@ -31,19 +31,34 @@ class Broker:
 
     def sell(self, item_name: str, amount: int) -> (int, bool):
         sell_success = False
-        total_cost = amount * self.inventory[item_name].cost
-        if self.inventory[item_name].amount > amount:
+        total_cost = self.calculate_cost(item_name, amount)
+        if self.inventory[item_name].amount >= amount:
             sell_success = True
             self.inventory[item_name].amount -= amount
             self.cash += total_cost
+            
         return total_cost, sell_success
+
+    def buy(self, item_name: str, amount: int, total_cost: int) -> str:
+        buy_success = False
+        if self.cash >= total_cost:
+            buy_success = True
+            self.inventory[item_name].amount += amount
+            self.cash -= total_cost
+
+        if buy_success:
+            return buy_success, f'{self.name} has successfully purchased {item_name} for {total_cost:,.2f}!'
+        return buy_success, f'{self.name} has insufficient funds!'
+
+    def calculate_cost(self, item_name: str, amount: int) -> int:
+        return self.inventory[item_name].cost * amount
 
     def refresh(self):
         self.inventory['Silk'].update_amount(2, 5)
         self.inventory['Silver'].update_amount(1, 3)
         self.inventory['Gold'].update_amount(0, 2)
         self.inventory['Diamond'].update_amount(0, 1)
-
+        self.cash += randint(-300, 500)
         for item_name in self.inventory.keys():
             self.inventory[item_name].update_cost()
 
