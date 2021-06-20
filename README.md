@@ -1,2 +1,2 @@
-# sister-final-project
+# Distributed and Parallel Systems Final Project
 Final project assignment for distributed and parallel systems course.
