@@ -86,7 +86,7 @@ class GameHandler(XMLRPC):
             return f"No Broker {broker_id} registered"
 
     def xmlrpc_get_broker_list(self):
-        return ["Broker "+str(b) for b in self.broker_list]
+        return [f"Broker {b}" for b in self.broker_list]
 
     def xmlrpc_identifier(self, player_name: str):
         print(f"{player_name} : Connected to server.")
