@@ -21,5 +21,5 @@ class Item:
         self.amount += randint(start, stop)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     print(Item(2000, 15))
