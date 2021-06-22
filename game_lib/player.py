@@ -23,6 +23,8 @@ class PlayerMenu(ServerProxy):
     def execute_command(self, command):
         if len(command) == 1:
             action = command[0]
+            if action == "ping":
+                self.ping(self.player.name)
         elif len(command) == 2:
             action, obj = command
             if action == 'view':
@@ -61,7 +63,7 @@ class PlayerMenu(ServerProxy):
                     if success:
                         self.player.cash += total_cost
                         self.player.inventory[item_name].amount -= amount
-                        message = f'Sucessfully sell {item_name} to broker {broker_id}. You have ${self.player.cash:,.2f}!'
+                        message = f'Successfully sell {item_name} to broker {broker_id}. You have ${self.player.cash:,.2f}!'
                     else:
                         message = f'Broker {broker_id} does not have enough cash!'
                     print(message)

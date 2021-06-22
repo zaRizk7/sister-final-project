@@ -4,7 +4,6 @@ from game_lib.broker import Broker
 from game_lib.player import PlayerMenu
 from game_lib.item import Item
 
-
 class GameHandler(XMLRPC):
     def __init__(self, n_broker, *args, **kwargs):
         super(GameHandler, self).__init__(*args, **kwargs)
@@ -65,6 +64,9 @@ class GameHandler(XMLRPC):
             print(f"{player_name} : Viewing Broker {broker_id} Failed")
             return f'No Broker {broker_id} registered'
 
+    def xmlrpc_ping(self, player_name : str):
+        print(f'{player_name} is pinging the server')
+        return 0
 
     def xmlrpc_get_broker_list(self):
         return ["Broker "+str(b) for b in self.broker_list]
